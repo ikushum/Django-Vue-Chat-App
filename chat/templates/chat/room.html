@@ -50,7 +50,7 @@
                         </v-card-title>
 
                         <v-divider class="mb-3"></v-divider>        
-                        <v-flex class="mx-4" elevation-0 max-height="200">
+                        <v-flex id="chatArea" class="chat-box mx-4" elevation-0 max-height="200">
                             <div v-if="noMessages" class="mb-3">
                                 No messages yet
                             </div>
@@ -104,7 +104,7 @@
                    'message': this.message,
                    'name': this.name
                }));
-               this.message = ''
+                this.message = ''
             },
             recieveMessage (message) {
                 this.noMessages = false
@@ -136,6 +136,12 @@
     .rounded {
         border-radius: 30px;
     }
+
+    .chat-box{
+        max-height:300px;
+        overflow:scroll;
+    }
 </style>
+
 
 </html>
