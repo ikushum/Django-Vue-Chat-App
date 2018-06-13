@@ -1,6 +1,6 @@
 # Django-Vue Live Chat
 
-A Live Chat application build using Django and Vue.js. It uses Django's Channels which allows us to handle WebSocket protocol. It thr frontend layer Vue.js uses WebSocket API to establish two-sided connection with the server.
+A Live Chat application build using Django and Vue.js. It uses Django's Channels which allows us to handle WebSocket protocol. It the frontend layer Vue.js uses WebSocket API to establish two-sided connection with the server.
 
 ### Installation
 
