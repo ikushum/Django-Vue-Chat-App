@@ -4,14 +4,80 @@
 <head>
     <meta charset="utf-8"/>
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
-    <!--<link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">-->
+    <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
     <title>Chat Room</title>
 </head>
 <body>
     <div id="app">
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br/>
-    <input id="chat-message-input" type="text" size="100"/><br/>
-    <input id="chat-message-submit" type="button" value="Send"/>
+        <v-app>
+            <v-content class="grey lighten-3">
+
+                <v-dialog > 
+                    <v-card>
+
+                    </v-card>
+                </v-dialog>
+
+                <v-dialog persistent v-model="askName" max-width="400">
+                  <v-card>
+
+                    <v-card-title class="blue white--text">
+                        Please enter your name 
+                    </v-card-title>
+
+                    <v-card-text class="pt-0"> 
+                        <v-text-field
+                          hide-details  
+                          label="Please Enter Your Name"
+                          v-model="name"
+                        ></v-text-field>  
+                    </v-card-text>
+                    <v-divider></v-divider>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="blue darken-1" class="caption" small flat="flat" @click.native="validateName()">Confirm</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+
+
+                <v-flex xs6 class="ma-4 white">
+                    <v-card class="pb-4">         
+
+                        <v-card-title class="blue white--text">
+                            <span><b class="headline"> Roonname: [[ roomName ]] </b></span>
+                            <v-spacer></v-spacer>
+                        </v-card-title>
+
+                        <v-divider class="mb-3"></v-divider>        
+                        <v-flex class="mx-4" elevation-0 max-height="200">
+                            <div v-if="noMessages" class="mb-3">
+                                No messages yet
+                            </div>
+                            <div class="mb-4" v-else v-for="message in messages">
+                                <div v-if="message.name !== name">
+                                    <span class="ml-2 mb-1"> <b> [[ message.name ]]: </b> </span> <br>
+                                    <span class="rounded green white--text px-4 py-1"> [[ message.message ]] </span>
+                                </div>
+                                <v-layout v-else>
+                                    <v-spacer></v-spacer>
+                                    <span class="rounded grey lighten-3 black--text px-4 py-2"> [[ message.message ]] </span>                           
+                                </v-layout>
+                            </div>    
+                        </v-flex>
+                        <v-divider></v-divider>
+                        <v-layout class="mx-4">
+                            <v-text-field
+                              hide-details  
+                              label="Send Message"
+                              v-model="message"
+                            ></v-text-field>   
+                            <v-btn @click="send" round color="primary" dark>Send</v-btn>      
+                    </v-layout>
+                    </v-card>
+                 </v-flex>  
+            </v-content>
+        </v-app>
     </div>
 </body>
 
@@ -22,50 +88,54 @@
 
     new Vue({
         el: '#app',
-        data: {
-            message: 'Hello Vue.js!',
-            chatSocket: new WebSocket('ws://' + window.location.host + '/ws/chat/' + {{ room_name_json }} + '/')
-        },
-        watch: {
-            chatSocket () {
-                console.log(this.chatSocket)
+        delimiters: ['[[', ']]'],
+        data: () => ({
+            name: '',
+            askName: true,
+            roomName: {{ room_name_json }},
+            message: '',
+            messages: [],
+            noMessages: true,
+            chatSocket: new WebSocket('ws://' + window.location.host + '/ws/chat/' + {{ room_name_json }} + '/')    
+        }),     
+        methods: {
+            send () {
+               this.chatSocket.send(JSON.stringify({
+                   'message': this.message,
+                   'name': this.name
+               }));
+               this.message = ''
+            },
+            recieveMessage (message) {
+                this.noMessages = false
+                this.messages.push(message)
+            },
+            validateName () {
+                if(this.name) this.askName = false
             }
         },
         created () {
-
-            console.log(this.chatSocket)
-
-//            chatSocket.onmessage = function(e) {
-//                var data = JSON.parse(e.data)
-//                var message = data['message']
-//                document.querySelector('#chat-log').value += (message + '\n')
-//            };
-//
-//            chatSocket.onclose = function(e) {
-//                console.error('Chat socket closed unexpectedly')
-//            };
-//
-//            document.querySelector('#chat-message-input').focus()
-//            document.querySelector('#chat-message-input').onkeyup = function(e) {
-//                if (e.keyCode === 13) {  // enter, return
-//                    document.querySelector('#chat-message-submit').click()
-//                }
-//            }
-//
-//            document.querySelector('#chat-message-submit').onclick = function(e) {
-//                var messageInputDom = document.querySelector('#chat-message-input');
-//                var message = messageInputDom.value;
-//                chatSocket.send(JSON.stringify({
-//                    'message': message
-//                }));
-//
-//                messageInputDom.value = ''
-//            }
-
-
-
+            this.chatSocket.onmessage = (m) => {
+                let message = {
+                     name: JSON.parse(m.data).name,
+                     message: JSON.parse(m.data).message
+                 }
+                console.log(message)
+                this.recieveMessage(message)
+            }
+            this.chatSocket.onclose = (m) => {
+               console.error('Chat socket was closed')                
+            }
         }
     })
 
 </script>
+
+
+<style>
+    .rounded {
+        border-radius: 30px;
+    }
+</style>
+
 </html>
