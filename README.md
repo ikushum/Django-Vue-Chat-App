@@ -16,7 +16,7 @@ $ echo "port 6379" | redis-server -
 ```
 For starting local dev server
 ```sh
-$ python3 manage.py runserver-
+$ python3 manage.py runserver
 ```
 
 License
