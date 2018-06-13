@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['192.168.100.23', 'localhost']
 INSTALLED_APPS = [
     'channels',
     'chat',
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -49,6 +50,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'liveChat.urls'
@@ -121,8 +124,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-ASGI_APPLICATION = 'liveChat.routing.application'
-
 # Channels
 ASGI_APPLICATION = 'liveChat.routing.application'
 CHANNEL_LAYERS = {
@@ -134,3 +135,8 @@ CHANNEL_LAYERS = {
     },
 }
 
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_WHITELIST = (
+    'localhost:8080',
+)
