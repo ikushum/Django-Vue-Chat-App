@@ -18,14 +18,14 @@
                     </v-card>
                 </v-dialog>
 
-                <v-dialog persistent v-model="askName" max-width="400">
+                <v-dialog persistent v-model="askName" max-width="600">
                   <v-card>
 
-                    <v-card-title class="blue white--text">
+                    <v-card-title class="blue white--text body-2">
                         Please enter your name 
                     </v-card-title>
 
-                    <v-card-text class="pt-0"> 
+                    <v-card-text class="pt-1"> 
                         <v-text-field
                           hide-details  
                           label="Please Enter Your Name"
@@ -41,11 +41,11 @@
                 </v-dialog>
 
 
-                <v-flex xs6 class="ma-4 white">
+                <v-flex xs12 v-if="!askName" class="ma-4 white">
                     <v-card class="pb-4">         
 
                         <v-card-title class="blue white--text">
-                            <span><b class="headline"> Roonname: [[ roomName ]] </b></span>
+                            <span><b class="headline"> Room name: [[ roomName ]] </b></span>
                             <v-spacer></v-spacer>
                         </v-card-title>
 
