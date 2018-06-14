@@ -56,7 +56,7 @@ ROOT_URLCONF = 'liveChat.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['./templates',],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -132,3 +132,4 @@ CHANNEL_LAYERS = {
     },
 }
 
+LOGIN_REDIRECT_URL = '/'
