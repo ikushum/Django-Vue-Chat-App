@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+    <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+    <title>Chat Room</title>
+</head>
+<body>
+    <div id="app">
+        <v-app>
+            <v-content class="grey lighten-3">
+              <v-layout>
+              <v-flex xs2>
+                <v-card class="pb-4" style="height:100%">
+                  <v-card-title class="blue white--text">
+                      <span class="ml-2">Chat list</span>
+                  </v-card-title>
+                    <v-list subheader>
+                      <v-subheader>Online users</v-subheader><v-divider></v-divider>
+                    <v-list-tile v-for="user in onlineUsers" key="user.name" avatar @click="selectUser(user)">
+                        <v-list-tile-avatar>
+                          <img :src="user.avatar">
+                        </v-list-tile-avatar>
+                        <v-list-tile-content>
+                          <v-list-tile-title v-html="user.name"></v-list-tile-title>
+                        </v-list-tile-content>
+                        <v-list-tile-action>
+                          <v-icon :color="user.active ? 'green' : 'grey'">chat_bubble</v-icon>
+                        </v-list-tile-action>
+
+                      </v-list-tile>
+                      <v-divider></v-divider>
+                      <v-subheader>Chat groups</v-subheader><v-divider></v-divider>
+                    <v-list-tile v-for="group in groups" key="group.name" avatar @click="selectGroup(group)">
+
+                        <v-list-tile-avatar>
+                          <img :src="group.avatar">
+                        </v-list-tile-avatar>
+                        <v-list-tile-content>
+                          <v-list-tile-title v-html="group.name"></v-list-tile-title>
+                        </v-list-tile-content>
+                        <v-list-tile-action>
+                          <v-icon :color="group.active ? 'green' : 'grey'">chat_bubble</v-icon>
+                        </v-list-tile-action>
+
+                      </v-list-tile>
+
+                    </v-list>
+
+
+                </v-card>
+            </v-flex>
+              <v-flex xs10 class="ma-1 white">
+                  <v-card class="pb-4 rounded" style="height:90%">
+
+                      <v-card-title class="blue white--text">
+                        <v-layout>
+                            <span class="mt-2 ml-1"><b class="headline"> [[currentUser.name]] </b></span>
+                          <v-spacer></v-spacer>
+                          <v-avatar
+                          :tile="tile"
+                          :size="avatarSize"
+                          color="grey lighten-4"
+                          src="currentUser.avatar"
+                          >
+                          <img v-bind:src="imgURL()" alt="avatar">
+                        </v-avatar>
+                      </v-layout>
+                      </v-card-title>
+
+                      <v-divider class="mb-3"></v-divider>
+                      <v-flex id="chatArea" class="chat-box mx-4" elevation-0>
+                          <div v-if="noMessages" class="mb-3">
+                              No messages yet
+                          </div>
+                          <div class="mb-4" v-else v-for="message in messages">
+                              <div v-if="message.name !== name">
+                                  <span class="ml-2 mb-1"> <b> [[ message.name ]]: </b> </span> <br>
+                                  <span class="rounded green white--text px-4 py-1"> [[ message.message ]] </span>
+                              </div>
+                              <v-layout v-else>
+                                  <v-spacer></v-spacer>
+                                  <span class="rounded grey lighten-3 black--text px-4 py-2"> [[ message.message ]] </span>
+                              </v-layout>
+                          </div>
+                      </v-flex>
+
+                  </v-card>
+                  <v-layout class="mx-4" align-end>
+                      <v-text-field
+                        hide-details
+                        label="Type here to send"
+                        v-model="message"
+                        v-on:keyup.enter="send"
+                      ></v-text-field>
+
+                </v-layout>
+               </v-flex>
+
+                 <v-layout>
+            </v-content>
+        </v-app>
+    </div>
+</body>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        delimiters: ['[[', ']]'],
+        data: {
+          currentUser: '',
+          onlineUsers:[
+            {name:'Pradeep Sapkota', active:true, avatar:'/home/pradeep/Desktop/chatApp/2.jpg'},
+            {name:'Shrawan Poudel', active:true, avatar:'/home/pradeep/Desktop/chatApp/5.jpg'},
+            {name:'Bindeep', active:false, avatar:'/home/pradeep/Desktop/chatApp/4.jpg'},
+            {name:'Ishan', active:true, avatar:'/home/pradeep/Desktop/chatApp/3.jpg'},
+            {name:'Rajesh Shrestha', active:true, avatar:'/home/pradeep/Desktop/chatApp/3.jpg'},
+          ],
+          groups:[
+            {name:'General', active:true, avatar:'/home/pradeep/Desktop/chatApp/2.jpg'},
+            {name:'Vue JS', active:true, avatar:'/home/pradeep/Desktop/chatApp/5.jpg'},
+            {name:'World Cup',active:true,  avatar:'/home/pradeep/Desktop/chatApp/4.jpg'}
+          ]
+        },
+        methods:{
+          selectUser(user){
+            this.currentUser=user
+          },
+          selectGroup(group){
+            this.currentUser=group
+          },
+          imgURL(){
+            return this.currentUser.avatar
+          }
+        },
+        created(){
+          this.currentUser=this.onlineUsers[0]
+        }
+    })
+</script>
+
+<style>
+    .rounded {
+        border-radius: 15px;
+    }
+
+    .chat-box{
+        overflow-y: scroll;
+    }
+</style>
+</html>
