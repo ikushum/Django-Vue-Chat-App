@@ -12,12 +12,6 @@
         <v-app>
             <v-content class="grey lighten-3">
 
-                <v-dialog > 
-                    <v-card>
-
-                    </v-card>
-                </v-dialog>
-
                 <v-dialog persistent v-model="askName" max-width="600">
                   <v-card>
 
@@ -41,8 +35,8 @@
                 </v-dialog>
 
 
-                <v-flex xs12 v-if="!askName" class="ma-4 white">
-                    <v-card class="pb-4">         
+                <v-flex xs12 v-if="!askName" class="ma-4">
+                    <v-card class="pb-4 rounded">         
 
                         <v-card-title class="blue white--text">
                             <span><b class="headline"> Room name: [[ roomName ]] </b></span>

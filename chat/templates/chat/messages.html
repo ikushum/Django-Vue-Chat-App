@@ -13,7 +13,7 @@
               <v-layout>
 				<v-flex xs2 class="ml-3">
 					<v-card class="rounded mt-2" height="100%">
-					  <v-card-title class="blue white--text">
+					  <v-card-title class="blue white--text py-3">
 					      <span class="ml-2">Chat list</span>
 					  </v-card-title>
 					    <v-list subheader>
@@ -36,14 +36,14 @@
 
               <v-flex xs10 class="ma-2 mx-3">
 
-                  <v-card height="90%"  class="pb-4 rounded">
-                      <v-card-title class="blue white--text">
+                  <v-card  class="pb-4 rounded">
+                      <v-card-title class="blue white--text py-3">
                         <v-layout>
-                            <span class="mt-2 ml-1"><b class="headline"> [[currentUser.fields.username]] </b></span>
+                            <span>[[currentUser.fields.username]] </span>
                           <v-spacer></v-spacer>
                           <v-avatar
                           :tile="tile"
-                          :size="avatarSize"
+                          :size="25"
                           color="grey lighten-4"
                           src="currentUser.avatar"
                           >
@@ -52,15 +52,17 @@
                       </v-layout>
                       </v-card-title>
 
-                      <v-divider class="mb-3"></v-divider>
+                      <v-divider></v-divider>
                       
-                      <v-flex id="chatArea" class="chat-box mx-4" elevation-0>
-                          <div class="mb-3">
+                      <v-flex id="chatArea" class="chat-box pa-3" elevation-0>
+                          <div class="">
                               No messages yet
                           </div>
                       </v-flex>
 
-                  <v-layout class="mx-4" align-end>
+
+                  <v-divider></v-divider>    	
+                  <v-layout class="mx-4">
                       <v-text-field
                         hide-details
                         label="Type here to send"
