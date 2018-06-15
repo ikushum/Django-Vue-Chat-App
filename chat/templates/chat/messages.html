@@ -88,6 +88,7 @@
         data: {
           currentUser: '',
           onlineUsers: {{ users }},
+          loggedInUser: {{ current_user }},
           groups:[
             {name:'General', active:true, avatar:'/home/pradeep/Desktop/chatApp/2.jpg'},
             {name:'Vue JS', active:true, avatar:'/home/pradeep/Desktop/chatApp/5.jpg'},
@@ -97,6 +98,10 @@
         methods:{
           selectUser(user){
             this.currentUser=user
+			// if (user.pk < this.loggedInUser[0].pk) {
+			// 	window.location.href = user.pk.toString() + this.loggedInUser[0].pk.toString() 
+			// } else window.location.href = this.loggedInUser[0].pk.toString() user.pk.toString()             
+			window.location.href = user.pk     	            
           },
           selectGroup(group){
             this.currentUser=group
@@ -107,7 +112,6 @@
         },
         created(){
           this.currentUser=this.onlineUsers[0]
-          let a = {{users}}
         }
     })
 </script>

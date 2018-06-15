@@ -18,5 +18,6 @@ def room(request, room_name):
 @login_required
 def messages(request):
     return render(request, 'chat/messages.html', {  
-    	'users':   mark_safe( serializers.serialize('json', User.objects.all() ) )
+    	'users':   mark_safe( serializers.serialize('json', User.objects.all() ) ),
+    	'current_user': mark_safe( serializers.serialize('json', [ request.user ] ) )
     })
