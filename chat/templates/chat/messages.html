@@ -1,85 +1,65 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
-    <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
-    <title>Chat Room</title>
-</head>
-<body>
-    <div id="app">
-        <v-app>
-            <v-content class="grey lighten-3">
-              <v-layout>
-				<v-flex xs2 class="ml-3">
-					<v-card class="rounded mt-2" height="100%">
-					  <v-card-title class="blue white--text py-3">
-					      <span class="ml-2">Chat list</span>
-					  </v-card-title>
-					    <v-list subheader>
-							<v-subheader>Online users</v-subheader><v-divider></v-divider>
-							<v-list-tile v-for="user in onlineUsers" key="user.username" avatar @click="selectUser(user)">
-					            <v-list-tile-avatar>
-					              <img src="https://www.freewebmentor.com/default-avatar.png" >
-					            </v-list-tile-avatar>
-							<v-list-tile-content>
-							  <v-list-tile-title v-html="user.fields.username"></v-list-tile-title>
-							</v-list-tile-content>
-							<v-list-tile-action>
-							  <v-icon :color="user.fields.is_active ? 'green' : 'grey'">chat_bubble</v-icon>
-							</v-list-tile-action>
-							</v-list-tile>
-					    </v-list>
-					</v-card>
-				</v-flex>
+{% extends "./base.html" %}
 
+{% block content %}
+  <v-layout>
 
-              <v-flex xs10 class="ma-2 mx-3">
+		<v-flex xs2 class="ml-3">
+			<v-card class="rounded mt-2" height="100%">
+			  <v-card-title class="blue white--text py-3">
+			      <span class="ml-2">Chat list</span>
+			  </v-card-title>
+			    <v-list subheader>
+					<v-subheader>Online users</v-subheader><v-divider></v-divider>
+					<v-list-tile v-for="user in onlineUsers" key="user.username" avatar @click="selectUser(user)">
+            <v-list-tile-avatar>
+              <img src="https://www.freewebmentor.com/default-avatar.png" >
+            </v-list-tile-avatar>
+					<v-list-tile-content>
+					  <v-list-tile-title v-html="user.fields.username"></v-list-tile-title>
+					</v-list-tile-content>
+					<v-list-tile-action>
+					  <v-icon :color="user.fields.is_active ? 'green' : 'grey'">chat_bubble</v-icon>
+					</v-list-tile-action>
+					</v-list-tile>
+			    </v-list>
+			</v-card>
+		</v-flex>
 
-                  <v-card  class="pb-4 rounded">
-                      <v-card-title class="blue white--text py-3">
-                        <v-layout>
-                            <span>[[currentUser.fields.username]] </span>
-                          <v-spacer></v-spacer>
-                          <v-avatar
-                          :tile="tile"
-                          :size="25"
-                          color="grey lighten-4"
-                          src="currentUser.avatar"
-                          >
-                          <img v-bind:src="imgURL()" alt="avatar">
-                        </v-avatar>
-                      </v-layout>
-                      </v-card-title>
+    <v-flex xs10 class="ma-2 mx-3">
+      <v-card  class="pb-4 rounded">
+          <v-card-title class="blue white--text py-3">
+            <v-layout>
+                <span>[[currentUser.fields.username]] </span>
+              <v-spacer></v-spacer>
+              <v-avatar
+              :tile="tile"
+              :size="25"
+              color="grey lighten-4"
+              src="currentUser.avatar"
+              >
+              <img v-bind:src="imgURL()" alt="avatar">
+            </v-avatar>
+          </v-layout>
+          </v-card-title>
+          <v-divider></v-divider>
+          <v-flex id="chatArea" class="chat-box pa-3" elevation-0>
+              <div class="">
+                  No messages yet
+              </div>
+          </v-flex>
+        <v-divider></v-divider>    	
+        <v-layout class="mx-4">
+            <v-text-field
+              hide-details
+              label="Type here to send"
+              v-model="message"
+              v-on:keyup.enter="send"
+            ></v-text-field>
+      </v-layout>
+    </v-card>
+  </v-flex>
 
-                      <v-divider></v-divider>
-                      
-                      <v-flex id="chatArea" class="chat-box pa-3" elevation-0>
-                          <div class="">
-                              No messages yet
-                          </div>
-                      </v-flex>
-
-
-                  <v-divider></v-divider>    	
-                  <v-layout class="mx-4">
-                      <v-text-field
-                        hide-details
-                        label="Type here to send"
-                        v-model="message"
-                        v-on:keyup.enter="send"
-                      ></v-text-field>
-                </v-layout>
-            </v-card>
-               </v-flex>
-
-                 <v-layout>
-            </v-content>
-        </v-app>
-    </div>
-</body>
-<script src="https://unpkg.com/vue/dist/vue.js"></script>
-<script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+<v-layout>
 
 <script>
     new Vue({
@@ -97,10 +77,7 @@
         },
         methods:{
           selectUser(user){
-            this.currentUser=user
-			// if (user.pk < this.loggedInUser[0].pk) {
-			// 	window.location.href = user.pk.toString() + this.loggedInUser[0].pk.toString() 
-			// } else window.location.href = this.loggedInUser[0].pk.toString() user.pk.toString()             
+            this.currentUser=user    
 			window.location.href = user.pk     	            
           },
           selectGroup(group){
@@ -117,12 +94,8 @@
 </script>
 
 <style>
-    .rounded {
-        border-radius: 15px;
-    }
-
-    .chat-box{
-        overflow-y: scroll;
-    }
+    .rounded {border-radius: 15px;}
+    .chat-box{overflow-y: scroll;}
 </style>
-</html>
+
+{% endblock content %}

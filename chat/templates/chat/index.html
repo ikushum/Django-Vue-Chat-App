@@ -1,26 +1,42 @@
-<!-- chat/templates/chat/index.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <title>Chat Rooms</title>
-</head>
-<body>
-    What chat room would you like to enter?<br/>
-    <input id="room-name-input" type="text" size="100"/><br/>
-    <input id="room-name-submit" type="button" value="Enter"/>
-</body>
-<script>
-    document.querySelector('#room-name-input').focus();
-    document.querySelector('#room-name-input').onkeyup = function(e) {
-        if (e.keyCode === 13) {  // enter, return
-            document.querySelector('#room-name-submit').click();
-        }
-    };
+{% extends "./base.html" %}
 
-    document.querySelector('#room-name-submit').onclick = function(e) {
-        var roomName = document.querySelector('#room-name-input').value;
-        window.location.pathname = '/chat/' + roomName + '/';
-    };
-</script>
-</html>
+{% block content %}
+
+<v-container fluid fill-height>
+  <v-layout align-center justify-center>
+    <v-flex xs12 sm8 md4>
+      <v-card class="elevation-12">
+        <v-toolbar dark color="primary">
+          <v-toolbar-title>Select Chat Room</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text>                
+            <v-text-field v-model="roomName" prepend-icon="chat" label="Room Name" type="text"></v-text-field>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions class="grey lighten-3">
+          <v-spacer></v-spacer>
+          <v-btn @click="select" color="primary">Select</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-flex>
+  </v-layout>
+</v-container>
+
+<script>
+
+    new Vue({
+        el: '#app',
+        delimiters: ['[[', ']]'],
+        data: () => ({
+            roomName: ''
+        }),     
+        methods: {
+            select () {
+                window.location.pathname = '/chat/' + this.roomName + '/';
+            }
+        }
+    })
+
+</script>    
+
+{% endblock content %}

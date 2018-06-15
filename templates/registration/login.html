@@ -7,7 +7,7 @@
     <title>Chat Room</title>
 </head>
 <body>
-    <div id="app">
+  <div id="app">
     <v-app id="inspire" class="grey lighten-3">
       <v-content>
         <v-container fluid fill-height>
@@ -17,13 +17,11 @@
                 <v-toolbar dark color="primary">
                   <v-toolbar-title>Login</v-toolbar-title>
                 </v-toolbar>
-
-                          {% if form.errors %}
-                          <v-alert class="py-1 my-0 mb-2" :value="true" type="error">
-                            Your username and password didn't match. Please try again.  
-                          </v-alert>
-                          {% endif %}    
-
+                {% if form.errors %}
+                <v-alert class="py-1 my-0 mb-2" :value="true" type="error">
+                  Your username and password didn't match. Please try again.  
+                </v-alert>
+                {% endif %}    
                 <v-card-text>                
                   <v-form method="POST" action="{% url 'login' %}" id="nativeForm">
                     {% csrf_token %}
@@ -41,18 +39,14 @@
           </v-layout>
         </v-container>
       </v-content>
-  </v-app>
-
-
-
-    </div>
+    </v-app>
+  </div>
 </body>
 
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
 
 <script>
-
     new Vue({
         el: '#app',
         data: {
@@ -64,8 +58,6 @@
             }
         }
     })
-
 </script>
-
 
 </html>
