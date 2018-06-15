@@ -11,52 +11,35 @@
         <v-app>
             <v-content class="grey lighten-3">
               <v-layout>
-              <v-flex xs2>
-                <v-card class="pb-4" style="height:100%">
-                  <v-card-title class="blue white--text">
-                      <span class="ml-2">Chat list</span>
-                  </v-card-title>
-                    <v-list subheader>
-                      <v-subheader>Online users</v-subheader><v-divider></v-divider>
-                    <v-list-tile v-for="user in onlineUsers" key="user.name" avatar @click="selectUser(user)">
-                        <v-list-tile-avatar>
-                          <img :src="user.avatar">
-                        </v-list-tile-avatar>
-                        <v-list-tile-content>
-                          <v-list-tile-title v-html="user.name"></v-list-tile-title>
-                        </v-list-tile-content>
-                        <v-list-tile-action>
-                          <v-icon :color="user.active ? 'green' : 'grey'">chat_bubble</v-icon>
-                        </v-list-tile-action>
-
-                      </v-list-tile>
-                      <v-divider></v-divider>
-                      <v-subheader>Chat groups</v-subheader><v-divider></v-divider>
-                    <v-list-tile v-for="group in groups" key="group.name" avatar @click="selectGroup(group)">
-
-                        <v-list-tile-avatar>
-                          <img :src="group.avatar">
-                        </v-list-tile-avatar>
-                        <v-list-tile-content>
-                          <v-list-tile-title v-html="group.name"></v-list-tile-title>
-                        </v-list-tile-content>
-                        <v-list-tile-action>
-                          <v-icon :color="group.active ? 'green' : 'grey'">chat_bubble</v-icon>
-                        </v-list-tile-action>
-
-                      </v-list-tile>
-
-                    </v-list>
+				<v-flex xs2 class="ml-3">
+					<v-card class="rounded mt-2" height="100%">
+					  <v-card-title class="blue white--text">
+					      <span class="ml-2">Chat list</span>
+					  </v-card-title>
+					    <v-list subheader>
+							<v-subheader>Online users</v-subheader><v-divider></v-divider>
+							<v-list-tile v-for="user in onlineUsers" key="user.username" avatar @click="selectUser(user)">
+					            <v-list-tile-avatar>
+					              <img src="https://www.freewebmentor.com/default-avatar.png" >
+					            </v-list-tile-avatar>
+							<v-list-tile-content>
+							  <v-list-tile-title v-html="user.fields.username"></v-list-tile-title>
+							</v-list-tile-content>
+							<v-list-tile-action>
+							  <v-icon :color="user.fields.is_active ? 'green' : 'grey'">chat_bubble</v-icon>
+							</v-list-tile-action>
+							</v-list-tile>
+					    </v-list>
+					</v-card>
+				</v-flex>
 
 
-                </v-card>
-            </v-flex>
-              <v-flex xs10 class="ma-1 white">
-                  <v-card class="pb-4 rounded" style="height:90%">
+              <v-flex xs10 class="ma-2 mx-3">
 
+                  <v-card height="90%"  class="pb-4 rounded">
                       <v-card-title class="blue white--text">
                         <v-layout>
-                            <span class="mt-2 ml-1"><b class="headline"> [[currentUser.name]] </b></span>
+                            <span class="mt-2 ml-1"><b class="headline"> [[currentUser.fields.username]] </b></span>
                           <v-spacer></v-spacer>
                           <v-avatar
                           :tile="tile"
@@ -70,23 +53,13 @@
                       </v-card-title>
 
                       <v-divider class="mb-3"></v-divider>
+                      
                       <v-flex id="chatArea" class="chat-box mx-4" elevation-0>
-                          <div v-if="noMessages" class="mb-3">
+                          <div class="mb-3">
                               No messages yet
-                          </div>
-                          <div class="mb-4" v-else v-for="message in messages">
-                              <div v-if="message.name !== name">
-                                  <span class="ml-2 mb-1"> <b> [[ message.name ]]: </b> </span> <br>
-                                  <span class="rounded green white--text px-4 py-1"> [[ message.message ]] </span>
-                              </div>
-                              <v-layout v-else>
-                                  <v-spacer></v-spacer>
-                                  <span class="rounded grey lighten-3 black--text px-4 py-2"> [[ message.message ]] </span>
-                              </v-layout>
                           </div>
                       </v-flex>
 
-                  </v-card>
                   <v-layout class="mx-4" align-end>
                       <v-text-field
                         hide-details
@@ -94,8 +67,8 @@
                         v-model="message"
                         v-on:keyup.enter="send"
                       ></v-text-field>
-
                 </v-layout>
+            </v-card>
                </v-flex>
 
                  <v-layout>
@@ -112,13 +85,7 @@
         delimiters: ['[[', ']]'],
         data: {
           currentUser: '',
-          onlineUsers:[
-            {name:'Pradeep Sapkota', active:true, avatar:'/home/pradeep/Desktop/chatApp/2.jpg'},
-            {name:'Shrawan Poudel', active:true, avatar:'/home/pradeep/Desktop/chatApp/5.jpg'},
-            {name:'Bindeep', active:false, avatar:'/home/pradeep/Desktop/chatApp/4.jpg'},
-            {name:'Ishan', active:true, avatar:'/home/pradeep/Desktop/chatApp/3.jpg'},
-            {name:'Rajesh Shrestha', active:true, avatar:'/home/pradeep/Desktop/chatApp/3.jpg'},
-          ],
+          onlineUsers: {{ users }},
           groups:[
             {name:'General', active:true, avatar:'/home/pradeep/Desktop/chatApp/2.jpg'},
             {name:'Vue JS', active:true, avatar:'/home/pradeep/Desktop/chatApp/5.jpg'},
@@ -133,11 +100,12 @@
             this.currentUser=group
           },
           imgURL(){
-            return this.currentUser.avatar
+            return "https://www.freewebmentor.com/default-avatar.png"					            
           }
         },
         created(){
           this.currentUser=this.onlineUsers[0]
+          let a = {{users}}
         }
     })
 </script>

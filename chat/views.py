@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required
 import json
+from django.contrib.auth.models import User
+from django.core import serializers
 
 @login_required
 def index(request):
@@ -15,4 +17,6 @@ def room(request, room_name):
 
 @login_required
 def messages(request):
-    return render(request, 'chat/messages.html', {})
+    return render(request, 'chat/messages.html', {  
+    	'users':   mark_safe( serializers.serialize('json', User.objects.all() ) )
+    })
