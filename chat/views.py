@@ -7,11 +7,11 @@ from django.core import serializers
 
 @login_required
 def index(request):
-    return render(request, 'chat/index.html', {})
+    return render(request, 'chat/chatRoomIndex.html', {})
 
 @login_required
 def room(request, room_name):
-    return render(request, 'chat/room.html', {
+    return render(request, 'chat/chatRoom.html', {
         'room_name_json': mark_safe(json.dumps(room_name)),
         'current_user': mark_safe( serializers.serialize('json', [ request.user ] ) ),
     })    
