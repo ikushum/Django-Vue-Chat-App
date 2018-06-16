@@ -4,23 +4,15 @@
   <v-layout>
 
 		<v-flex xs2 class="ml-3">
-
 			<v-card class="rounded mt-2">
-			  <v-card-title class="blue white--text py-3">
-			      <span class="ml-2">Chat list</span>
-			  </v-card-title>
+			  <v-card-title class="blue white--text py-3">Chat list</v-card-title>
 			    <v-list subheader>
-					<v-subheader>Online users</v-subheader><v-divider></v-divider>
 					<v-list-tile v-for="user in onlineUsers" v-if="user.pk !== loggedInUser.pk" :key="user.pk" avatar @click="selectUser(user)">
             <v-list-tile-avatar>
               <img src="https://www.freewebmentor.com/default-avatar.png" >
             </v-list-tile-avatar>
-					<v-list-tile-content>
-					  <v-list-tile-title v-html="user.fields.username"></v-list-tile-title>
-					</v-list-tile-content>
-					<v-list-tile-action>
+					  <v-list-tile-title> [[ user.fields.username ]]</v-list-tile-title>
 					  <v-icon :color="user.fields.is_active ? 'green' : 'grey'">chat_bubble</v-icon>
-					</v-list-tile-action>
 					</v-list-tile>
 			    </v-list>
 			</v-card>
@@ -30,26 +22,21 @@
       <v-card class="rounded pb-4">
           <v-card-title class="blue white--text py-3">
             <v-layout v-if="privateView">
-                <span>[[selectedUser.fields.username]] </span>
+              <span>[[selectedUser.fields.username]] </span>
               <v-spacer></v-spacer>
-              <v-avatar
-              :size="25"
-              color="grey lighten-4"
-              src="selectedUser.avatar"
-              >
-              <img v-bind:src="imgURL()" alt="avatar">
-            </v-avatar>
-          </v-layout>
-          <span v-else> Please select a user to chat with </span>
-          </v-card-title>
-          <v-divider></v-divider>
-          {% include "./chatAreaBase.html" %}    
-    </v-card>
-  </v-flex>
+              <v-avatar :size="25"color="grey lighten-4">
+                <img src="https://www.freewebmentor.com/default-avatar.png" alt="avatar">
+              </v-avatar>
+            </v-layout>
+            <span v-else> Please select a user to chat with </span>
+            </v-card-title>
+            <v-divider></v-divider>
+            {% include "./chatAreaBase.html" %}    
+      </v-card>
+    </v-flex>
 
-<v-layout>
+  <v-layout>
 {% endblock content %}
-
 
 {% block style %}
 <style>
@@ -57,7 +44,6 @@
     .chat-box{overflow-y: scroll;}
 </style>
 {% endblock style %}
-
 
 {% block script %}
 <script>
@@ -81,15 +67,8 @@
             this.messages = []
             window.location.href = '/message/' + user.pk                  
           },
-          imgURL(){
-            return "https://www.freewebmentor.com/default-avatar.png"                     
-          },
           getChatToken(){
-            if (this.loggedInUser.pk < this.selectedUser.pk) {
-              return this.loggedInUser.pk + this.loggedInUser.fields.username + this.selectedUser.pk + this.selectedUser.fields.username
-            } else {
-              return this.selectedUser.pk + this.selectedUser.fields.username + this.loggedInUser.pk + this.loggedInUser.fields.username
-            }
+            return (this.loggedInUser.pk < this.selectedUser.pk ) ? ( this.loggedInUser.pk + this.loggedInUser.fields.username + this.selectedUser.pk + this.selectedUser.fields.username ) : this.selectedUser.pk + this.selectedUser.fields.username + this.loggedInUser.pk + this.loggedInUser.fields.username  
           },
           recieveMessage (message) {
               this.noMessages = false
@@ -112,7 +91,6 @@
                    name: JSON.parse(m.data).name,
                    message: JSON.parse(m.data).message
                }
-              console.log(message)
               this.recieveMessage(message)
             }
           }  
