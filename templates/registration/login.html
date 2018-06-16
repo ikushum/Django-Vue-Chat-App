@@ -1,51 +1,37 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
-    <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
-    <title>Chat Room</title>
-</head>
-<body>
-  <div id="app">
-    <v-app id="inspire" class="grey lighten-3">
-      <v-content>
-        <v-container fluid fill-height>
-          <v-layout align-center justify-center>
-            <v-flex xs12 sm8 md4>
-              <v-card class="elevation-12">
-                <v-toolbar dark color="primary">
-                  <v-toolbar-title>Login</v-toolbar-title>
-                </v-toolbar>
-                {% if form.errors %}
-                <v-alert class="py-1 my-0 mb-2" :value="true" type="error">
-                  Your username and password didn't match. Please try again.  
-                </v-alert>
-                {% endif %}    
-                <v-card-text>                
-                  <v-form method="POST" action="{% url 'login' %}" id="nativeForm">
-                    {% csrf_token %}
-                    <v-text-field prepend-icon="person" name="username" label="Username" type="text"></v-text-field>
-                    <v-text-field id="password" prepend-icon="lock" name="password" label="Password" type="password"></v-text-field>
-                  </v-form>
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions class="grey lighten-3">
-                  <v-spacer></v-spacer>
-                  <v-btn @click="send" color="primary">Login</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-flex>
-          </v-layout>
-        </v-container>
-      </v-content>
-    </v-app>
-  </div>
-</body>
+{% extends "base.html" %}
 
-<script src="https://unpkg.com/vue/dist/vue.js"></script>
-<script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+{% block content %}
+  <v-container fluid fill-height>
+    <v-layout align-center justify-center>
+      <v-flex xs12 sm8 md4>
+        <v-card class="elevation-12">
+          <v-toolbar dark color="primary">
+            <v-toolbar-title>Login</v-toolbar-title>
+          </v-toolbar>
+          {% if form.errors %}
+          <v-alert class="py-1 my-0 mb-2" :value="true" type="error">
+            Your username and password didn't match. Please try again.  
+          </v-alert>
+          {% endif %}    
+          <v-card-text>                
+            <v-form method="POST" action="{% url 'login' %}" id="nativeForm">
+              {% csrf_token %}
+              <v-text-field prepend-icon="person" name="username" label="Username" type="text"></v-text-field>
+              <v-text-field id="password" prepend-icon="lock" name="password" label="Password" type="password"></v-text-field>
+            </v-form>
+          </v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions class="grey lighten-3">
+            <v-spacer></v-spacer>
+            <v-btn @click="send" color="primary">Login</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
+{% endblock content %}        
 
+{% block script %}
 <script>
     new Vue({
         el: '#app',
@@ -59,5 +45,4 @@
         }
     })
 </script>
-
-</html>
+{% endblock script %}

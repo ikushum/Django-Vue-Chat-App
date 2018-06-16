@@ -1,4 +1,4 @@
-{% extends "./base.html" %}
+{% extends "base.html" %}
 
 {% block content %}
   <v-layout>
@@ -10,7 +10,7 @@
 			  </v-card-title>
 			    <v-list subheader>
 					<v-subheader>Online users</v-subheader><v-divider></v-divider>
-					<v-list-tile v-for="user in onlineUsers" key="user.username" avatar @click="selectUser(user)">
+					<v-list-tile v-for="user in onlineUsers" :key="user.pk" avatar @click="selectUser(user)">
             <v-list-tile-avatar>
               <img src="https://www.freewebmentor.com/default-avatar.png" >
             </v-list-tile-avatar>
@@ -29,13 +29,12 @@
       <v-card  class="pb-4 rounded">
           <v-card-title class="blue white--text py-3">
             <v-layout>
-                <span>[[currentUser.fields.username]] </span>
+                <span>[[selectedUser.fields.username]] </span>
               <v-spacer></v-spacer>
               <v-avatar
-              :tile="tile"
               :size="25"
               color="grey lighten-4"
-              src="currentUser.avatar"
+              src="selectedUser.avatar"
               >
               <img v-bind:src="imgURL()" alt="avatar">
             </v-avatar>
@@ -60,42 +59,40 @@
   </v-flex>
 
 <v-layout>
+{% endblock content %}
 
+
+{% block style %}
+<style>
+    .rounded {border-radius: 15px;}
+    .chat-box{overflow-y: scroll;}
+</style>
+{% endblock style %}
+
+
+{% block script %}
 <script>
     new Vue({
         el: '#app',
         delimiters: ['[[', ']]'],
         data: {
-          currentUser: '',
+          selectedUser: '',
           onlineUsers: {{ users }},
           loggedInUser: {{ current_user }},
-          groups:[
-            {name:'General', active:true, avatar:'/home/pradeep/Desktop/chatApp/2.jpg'},
-            {name:'Vue JS', active:true, avatar:'/home/pradeep/Desktop/chatApp/5.jpg'},
-            {name:'World Cup',active:true,  avatar:'/home/pradeep/Desktop/chatApp/4.jpg'}
-          ]
+          message: ''
         },
         methods:{
           selectUser(user){
-            this.currentUser=user    
-			window.location.href = user.pk     	            
-          },
-          selectGroup(group){
-            this.currentUser=group
+            this.selectedUser=user    
+            window.location.href = user.pk                  
           },
           imgURL(){
-            return "https://www.freewebmentor.com/default-avatar.png"					            
+            return "https://www.freewebmentor.com/default-avatar.png"                     
           }
         },
         created(){
-          this.currentUser=this.onlineUsers[0]
+          this.selectedUser=this.onlineUsers[0]
         }
     })
 </script>
-
-<style>
-    .rounded {border-radius: 15px;}
-    .chat-box{overflow-y: scroll;}
-</style>
-
-{% endblock content %}
+{% endblock script %}

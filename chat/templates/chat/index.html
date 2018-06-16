@@ -1,4 +1,4 @@
-{% extends "./base.html" %}
+{% extends "base.html" %}
 
 {% block content %}
 
@@ -22,8 +22,10 @@
   </v-layout>
 </v-container>
 
-<script>
+{% endblock content %}
 
+{% block script %}
+<script>
     new Vue({
         el: '#app',
         delimiters: ['[[', ']]'],
@@ -36,7 +38,5 @@
             }
         }
     })
-
 </script>    
-
-{% endblock content %}
+{% endblock script %}
