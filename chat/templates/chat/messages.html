@@ -129,7 +129,7 @@
         created(){
           if (this.selectedUser.length !== 1) this.privateView = true
           if (this.privateView) {
-            this.chatSocket = new WebSocket('ws://' + window.location.host + '/group_chat/ws/' + this.getChatToken() + '/')
+            this.chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + this.getChatToken() + '/')
             this.chatSocket.onmessage = (m) => {
               let message = {
                    name: JSON.parse(m.data).name,

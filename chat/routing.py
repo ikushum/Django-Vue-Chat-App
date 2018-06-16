@@ -1,8 +1,7 @@
 from django.conf.urls import url
 
-from . import groupChatConsumers, privateChatConsumers
+from . import consumers
 
 websocket_urlpatterns = [
-    url(r'^group_chat/ws/(?P<room_name>[^/]+)/$', groupChatConsumers.GroupChatConsumer),
-    url(r'^private_chat/ws/(?P<chat_token>[^/]+)/$', privateChatConsumers.PrivateChatConsumer),
+    url(r'^ws/chat/(?P<room_name>[^/]+)/$', consumers.Consumer),
 ]

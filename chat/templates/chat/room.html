@@ -86,7 +86,7 @@
             message: '',
             messages: [],
             noMessages: true,
-            chatSocket: new WebSocket('ws://' + window.location.host + '/group_chat/ws/' + {{ room_name_json }} + '/')    
+            chatSocket: new WebSocket('ws://' + window.location.host + '/ws/chat/' + {{ room_name_json }} + '/')    
         }),     
         methods: {
             send () {
