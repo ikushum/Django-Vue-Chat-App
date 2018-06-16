@@ -3,7 +3,12 @@ from channels.generic.websocket import WebsocketConsumer
 import json
 
 class PrivateChatConsumer(WebsocketConsumer):
+
+    def __init__(self):
+        print('sas')
+
     def connect(self):
+        print('a')
         self.chat_token = self.scope['url_route']['kwargs']['chat_token']
         self.chat_token_name = 'chat_%s' % self.chat_token
 

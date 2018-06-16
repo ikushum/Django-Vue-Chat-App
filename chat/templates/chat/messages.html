@@ -5,13 +5,13 @@
 
 		<v-flex xs2 class="ml-3">
 
-			<v-card class="rounded mt-2" height="100%">
+			<v-card class="rounded mt-2">
 			  <v-card-title class="blue white--text py-3">
 			      <span class="ml-2">Chat list</span>
 			  </v-card-title>
 			    <v-list subheader>
 					<v-subheader>Online users</v-subheader><v-divider></v-divider>
-					<v-list-tile v-for="user in onlineUsers" :key="user.pk" avatar @click="selectUser(user)">
+					<v-list-tile v-for="user in onlineUsers" v-if="user.pk !== loggedInUser.pk" :key="user.pk" avatar @click="selectUser(user)">
             <v-list-tile-avatar>
               <img src="https://www.freewebmentor.com/default-avatar.png" >
             </v-list-tile-avatar>
@@ -27,9 +27,9 @@
 		</v-flex>
 
     <v-flex xs10 class="ma-2 mx-3">
-      <v-card  class="pb-4 rounded">
+      <v-card  class="rounded">
           <v-card-title class="blue white--text py-3">
-            <v-layout>
+            <v-layout v-if="privateView">
                 <span>[[selectedUser.fields.username]] </span>
               <v-spacer></v-spacer>
               <v-avatar
@@ -40,17 +40,28 @@
               <img v-bind:src="imgURL()" alt="avatar">
             </v-avatar>
           </v-layout>
+          <span v-else> Please select a user to chat with </span>
           </v-card-title>
           <v-divider></v-divider>
           <v-flex id="chatArea" class="chat-box pa-3" elevation-0>
-              <div class="">
-                  No messages yet
-              </div>
+            <div v-if="noMessages" class="mb-3">
+                No messages yet
+            </div>
+            <div class="mb-4" v-else v-for="message in messages">
+                <div v-if="message.name !== loggedInUser.fields.username">
+                    <span class="ml-2 mb-1"> <b> [[ message.name ]]: </b> </span> <br>
+                    <span class="rounded green white--text px-4 py-1"> [[ message.message ]] </span>
+                </div>
+                <v-layout v-else>
+                    <v-spacer></v-spacer>
+                    <span class="rounded grey lighten-3 black--text px-4 py-2"> [[ message.message ]] </span>                           
+                </v-layout>
+            </div>  
           </v-flex>
         <v-divider></v-divider>    	
         <v-layout class="mx-4">
             <v-text-field
-              hide-details
+              v-if="privateView"
               label="Type here to send"
               v-model="message"
               v-on:keyup.enter="send"
@@ -77,22 +88,57 @@
         el: '#app',
         delimiters: ['[[', ']]'],
         data: {
+          privateView: false,
           onlineUsers: {{ users }},
-          loggedInUser: {{ current_user }},
+          loggedInUser: {{ current_user }}[0],
           selectedUser: {{ selected_user }}[0],          
-          message: ''
+          message: '',
+          chatSocket: null,
+          messages: [],
+          noMessages: true
         },
         methods:{
           selectUser(user){
-            this.selectedUser=user    
+            this.selectedUser=user   
+            this.noMessages = true             
+            this.messages = []
             window.location.href = '/message/' + user.pk                  
           },
           imgURL(){
             return "https://www.freewebmentor.com/default-avatar.png"                     
-          }
+          },
+          getChatToken(){
+            if (this.loggedInUser.pk < this.selectedUser.pk) {
+              return this.loggedInUser.pk + this.loggedInUser.fields.username + this.selectedUser.pk + this.selectedUser.fields.username
+            } else {
+              return this.selectedUser.pk + this.selectedUser.fields.username + this.loggedInUser.pk + this.loggedInUser.fields.username
+            }
+          },
+          recieveMessage (message) {
+              this.noMessages = false
+              this.messages.push(message)
+          },
+          send() {
+               this.chatSocket.send(JSON.stringify({
+                   'message': this.message,
+                   'name': this.loggedInUser.fields.username
+               }));
+               this.message = ''            
+          }        
         },
         created(){
-          if (this.selectedUser.length === 1) this.selectedUser = this.onlineUsers[0]
+          if (this.selectedUser.length !== 1) this.privateView = true
+          if (this.privateView) {
+            this.chatSocket = new WebSocket('ws://' + window.location.host + '/group_chat/ws/' + this.getChatToken() + '/')
+            this.chatSocket.onmessage = (m) => {
+              let message = {
+                   name: JSON.parse(m.data).name,
+                   message: JSON.parse(m.data).message
+               }
+              console.log(message)
+              this.recieveMessage(message)
+            }
+          }  
         }
     })
 </script>
