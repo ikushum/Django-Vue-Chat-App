@@ -1,0 +1,25 @@
+<v-card-text id="chatArea" class="chat-box pa-3" elevation-0>
+  <div v-if="noMessages" class="mb-3">
+      No messages yet
+  </div>
+  <div class="mb-4" v-else v-for="message in messages">
+      <div v-if="message.name !== loggedInUser.fields.username">
+          <span class="ml-2 mb-1"> <b> [[ message.name ]]: </b> </span> <br>
+          <span class="rounded green white--text px-4 py-1"> [[ message.message ]] </span>
+      </div>
+      <v-layout v-else>
+          <v-spacer></v-spacer>
+          <span class="rounded grey lighten-3 black--text px-4 py-2"> [[ message.message ]] </span>                           
+      </v-layout>
+  </div>  
+</v-card-text>
+<v-divider></v-divider>    	
+<v-layout class="mx-4">
+  <v-text-field
+    hide-details
+    v-if="privateView"
+    label="Type here to send"
+    v-model="message"
+    v-on:keyup.enter="send"
+  ></v-text-field>
+</v-layout>

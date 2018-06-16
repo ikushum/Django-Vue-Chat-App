@@ -2,63 +2,14 @@
 
 {% block content %}
 
-<v-container v-if="askName" fluid fill-height>
-  <v-layout align-center justify-center>
-    <v-flex xs12 sm8 md4>
-      <v-card class="elevation-12">
-        <v-toolbar dark color="primary">
-          <v-toolbar-title>Please Enter Your Name</v-toolbar-title>
-        </v-toolbar>
-        <v-card-text>    
-            <v-text-field
-              label="Please Enter Your Name"
-              v-model="name"
-              prepend-icon="person"
-        ></v-text-field> 
-        </v-card-text>
-        <v-divider></v-divider>
-        <v-card-actions class="grey lighten-3">
-          <v-spacer></v-spacer>
-          <v-btn @click.native="validateName()" color="primary">Confirm</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-flex>
-  </v-layout>
-</v-container>
-
-<v-flex xs12 v-if="!askName" class="ma-4">
+<v-flex xs12 class="ma-4">
     <v-card class="pb-4 rounded">         
-
         <v-card-title class="blue white--text">
             <span><b class="headline"> Room name: [[ roomName ]] </b></span>
             <v-spacer></v-spacer>
         </v-card-title>
-
         <v-divider class="mb-3"></v-divider>        
-        <v-flex id="chatArea" class="chat-box mx-4" elevation-0 max-height="200">
-            <div v-if="noMessages" class="mb-3">
-                No messages yet
-            </div>
-            <div class="mb-4" v-else v-for="message in messages">
-                <div v-if="message.name !== name">
-                    <span class="ml-2 mb-1"> <b> [[ message.name ]]: </b> </span> <br>
-                    <span class="rounded green white--text px-4 py-1"> [[ message.message ]] </span>
-                </div>
-                <v-layout v-else>
-                    <v-spacer></v-spacer>
-                    <span class="rounded grey lighten-3 black--text px-4 py-2"> [[ message.message ]] </span>                           
-                </v-layout>
-            </div>    
-        </v-flex>
-        <v-divider></v-divider>
-        <v-layout class="mx-4">
-            <v-text-field
-              hide-details  
-              label="Send Message"
-              v-model="message"
-            ></v-text-field>   
-            <v-btn @click="send" round color="primary" dark>Send</v-btn>      
-    </v-layout>
+        {% include "./chatAreaBase.html" %}    
     </v-card>
  </v-flex>  
 
@@ -80,28 +31,25 @@
         el: '#app',
         delimiters: ['[[', ']]'],
         data: () => ({
-            name: '',
-            askName: true,
             roomName: {{ room_name_json }},
+            privateView: true,
             message: '',
             messages: [],
             noMessages: true,
+            loggedInUser: {{ current_user }}[0],
             chatSocket: new WebSocket('ws://' + window.location.host + '/ws/chat/' + {{ room_name_json }} + '/')    
         }),     
         methods: {
             send () {
                this.chatSocket.send(JSON.stringify({
                    'message': this.message,
-                   'name': this.name
+                   'name': this.loggedInUser.fields.username
                }));
                this.message = ''
             },
             recieveMessage (message) {
                 this.noMessages = false
                 this.messages.push(message)
-            },
-            validateName () {
-                if(this.name) this.askName = false
             }
         },
         created () {

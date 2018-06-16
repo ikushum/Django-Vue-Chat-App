@@ -12,7 +12,8 @@ def index(request):
 @login_required
 def room(request, room_name):
     return render(request, 'chat/room.html', {
-        'room_name_json': mark_safe(json.dumps(room_name))
+        'room_name_json': mark_safe(json.dumps(room_name)),
+        'current_user': mark_safe( serializers.serialize('json', [ request.user ] ) ),
     })    
 
 @login_required
