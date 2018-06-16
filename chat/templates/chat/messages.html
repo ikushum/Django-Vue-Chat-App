@@ -4,6 +4,7 @@
   <v-layout>
 
 		<v-flex xs2 class="ml-3">
+
 			<v-card class="rounded mt-2" height="100%">
 			  <v-card-title class="blue white--text py-3">
 			      <span class="ml-2">Chat list</span>
@@ -76,22 +77,22 @@
         el: '#app',
         delimiters: ['[[', ']]'],
         data: {
-          selectedUser: '',
           onlineUsers: {{ users }},
           loggedInUser: {{ current_user }},
+          selectedUser: {{ selected_user }}[0],          
           message: ''
         },
         methods:{
           selectUser(user){
             this.selectedUser=user    
-            window.location.href = user.pk                  
+            window.location.href = '/message/' + user.pk                  
           },
           imgURL(){
             return "https://www.freewebmentor.com/default-avatar.png"                     
           }
         },
         created(){
-          this.selectedUser=this.onlineUsers[0]
+          if (this.selectedUser.length === 1) this.selectedUser = this.onlineUsers[0]
         }
     })
 </script>

@@ -19,5 +19,12 @@ def room(request, room_name):
 def messages(request):
     return render(request, 'chat/messages.html', {  
     	'users':   mark_safe( serializers.serialize('json', User.objects.all() ) ),
-    	'current_user': mark_safe( serializers.serialize('json', [ request.user ] ) )
+    	'current_user': mark_safe( serializers.serialize('json', [ request.user ] ) ),
     })
+
+def message(request, selected_user):
+    return render(request, 'chat/messages.html', {  
+    	'users':   mark_safe( serializers.serialize('json', User.objects.all() ) ),
+    	'current_user': mark_safe( serializers.serialize('json', [ request.user ] ) ),
+    	'selected_user': mark_safe( serializers.serialize('json', [ User.objects.get(pk=selected_user) ] ) ),	
+    })    
