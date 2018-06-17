@@ -15,6 +15,10 @@ Start a redis server on port 6379
 ```sh
 $ echo "port 6379" | redis-server -
 ```
+Apply migrations
+```sh
+$ python3 manage.py migrate
+```
 For starting local dev server
 ```sh
 $ python3 manage.py runserver
