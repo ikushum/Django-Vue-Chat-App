@@ -41,7 +41,8 @@
             send () {
                this.chatSocket.send(JSON.stringify({
                    'message': this.message,
-                   'name': this.loggedInUser.fields.username
+                   'sender': this.loggedInUser,
+                   'receiver': null
                }));
                this.message = ''
             },
@@ -53,7 +54,7 @@
         created () {
             this.chatSocket.onmessage = (m) => {
                 let message = {
-                     name: JSON.parse(m.data).name,
+                     name: JSON.parse(m.data).sender.fields.username,
                      message: JSON.parse(m.data).message
                  }
                 this.recieveMessage(message)
