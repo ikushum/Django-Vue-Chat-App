@@ -13,6 +13,19 @@
     <div id="app">
         <v-app>
             <v-content class="grey lighten-3">
+
+            <v-toolbar dark class="primary">
+            <v-spacer></v-spacer>
+                <v-toolbar-items>
+                    {% if request.user.is_authenticated %}                                        
+                        <v-btn href="/messages" flat>Messages</v-btn>
+                        <v-btn href="/chat" flat>Group Chat</v-btn>
+                        <v-btn href="/accounts/logout?next=/accounts/login" flat>Logout</v-btn>
+                    {% else %}    
+                        <v-btn href="/accounts/login" flat>Login</v-btn>                    
+                    {% endif %}    
+                </v-toolbar-items>
+            </v-toolbar>
                 {% block content %}{% endblock content %}
             </v-content>
         </v-app>
