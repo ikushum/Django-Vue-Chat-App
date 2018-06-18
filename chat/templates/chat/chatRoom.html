@@ -30,12 +30,12 @@
         delimiters: ['[[', ']]'],
         data: () => ({
             roomName: {{ room_name_json }},
-            privateView: false,
-            groupView: true,
+            privateView: true,
             message: '',
             messages: [],
             noMessages: true,
             loggedInUser: {{ current_user }}[0],
+            chatUsersMap: {},          
             chatSocket: new WebSocket('ws://' + window.location.host + '/ws/chat/' + {{ room_name_json }} + '/')    
         }),     
         methods: {
@@ -53,12 +53,16 @@
             }
         },
         created () {
+            this.chatUsersMap[this.loggedInUser.pk] = this.loggedInUser.fields.username
             this.chatSocket.onmessage = (m) => {
-                let message = {
-                     name: JSON.parse(m.data).sender.fields.username,
-                     message: JSON.parse(m.data).message
-                 }
-                this.recieveMessage(message)
+              this.chatUsersMap[JSON.parse(m.data).sender.pk] = JSON.parse(m.data).sender.fields.username
+              let message = {
+                    fields: {
+                        sender: JSON.parse(m.data).sender.pk,
+                        text: JSON.parse(m.data).message
+                    }
+               }
+               this.recieveMessage(message)
             }
         }
     })
