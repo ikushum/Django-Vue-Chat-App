@@ -2,7 +2,6 @@
 
 {% block content %}
   <v-layout>
-
 		<v-flex xs2 class="ml-3">
 			<v-card class="rounded mt-2">
 			  <v-card-title class="blue white--text py-3">Chat list</v-card-title>
@@ -71,6 +70,7 @@
           recieveMessage (message) {
               this.noMessages = false
               this.messages.push(message)
+              setTimeout(() => {document.getElementById("bottomOfArea").scrollIntoView({ block: 'end',  behavior: 'smooth' }) }, 0)    
           },
           send() {
                this.chatSocket.send(JSON.stringify({
@@ -82,23 +82,23 @@
           }       
         },
         created(){
-        	console.log(this.messages)
-			if (this.selectedUser.length !== 1) this.privateView = true
-			if (this.messages.length > 0) this.noMessages = false
-			if (this.privateView) {
-				this.chatUsersMap[this.loggedInUser.pk] = this.loggedInUser.fields.username
-				this.chatUsersMap[this.selectedUser.pk] = this.selectedUser.fields.username				
-				this.chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + this.getChatToken() + '/')
-				this.chatSocket.onmessage = (m) => {
-				  let message = {
-				  		fields: {
-				  			sender: JSON.parse(m.data).sender.pk,
-				  			text: JSON.parse(m.data).message
-				  		}
-				   }
-				   this.recieveMessage(message)
-				}
-			}  
+  		    if(this.selectedUser.length !== 1) this.privateView = true
+			    if(this.messages.length > 0) this.noMessages = false
+			    if(this.privateView) {
+      			this.chatUsersMap[this.loggedInUser.pk] = this.loggedInUser.fields.username
+    				this.chatUsersMap[this.selectedUser.pk] = this.selectedUser.fields.username				
+    				this.chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + this.getChatToken() + '/')
+            setTimeout(() => {document.getElementById("bottomOfArea").scrollIntoView({ block: 'end',  behavior: 'smooth' }) }, 0)
+            this.chatSocket.onmessage = (m) => {
+    				  let message = {
+    				  		fields: {
+    				  			sender: JSON.parse(m.data).sender.pk,
+    				  			text: JSON.parse(m.data).message
+    				  		}
+    				  }
+    				  this.recieveMessage(message)
+    				}
+			    }  
         }
     })
 </script>

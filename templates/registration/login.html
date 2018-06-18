@@ -17,7 +17,7 @@
             <v-form method="POST" action="{% url 'login' %}" id="nativeForm">
               {% csrf_token %}
               <v-text-field prepend-icon="person" name="username" label="Username" type="text"></v-text-field>
-              <v-text-field id="password" prepend-icon="lock" name="password" label="Password" type="password"></v-text-field>
+              <v-text-field id="password" prepend-icon="lock" name="password" label="Password" type="password" v-on:keyup.enter="send"></v-text-field>
             </v-form>
           </v-card-text>
           <v-divider></v-divider>

@@ -4,7 +4,7 @@
 <v-flex xs12 class="ma-4">
     <v-card class="pb-4 rounded">         
         <v-card-title class="blue white--text">
-            <span><b class="headline"> Room name: [[ roomName ]] </b></span>
+            <span><b class="subheading"> Room name: [[ roomName ]] </b></span>
             <v-spacer></v-spacer>
         </v-card-title>
         <v-divider class="mb-3"></v-divider>        
@@ -15,7 +15,7 @@
 
 {% block style%}
 <style>
-    .rounded {border-radius: 30px}
+    .rounded {border-radius: 15px}
     .chat-box{
         max-height:300px;
         overflow:scroll;
@@ -50,9 +50,11 @@
             recieveMessage (message) {
                 this.noMessages = false
                 this.messages.push(message)
+                setTimeout(() => {document.getElementById("bottomOfArea").scrollIntoView({ block: 'end',  behavior: 'smooth' }) }, 0)    
             }
         },
         created () {
+            setTimeout(() => {document.getElementById("bottomOfArea").scrollIntoView({ block: 'end',  behavior: 'smooth' }) }, 0)                           
             this.chatUsersMap[this.loggedInUser.pk] = this.loggedInUser.fields.username
             this.chatSocket.onmessage = (m) => {
               this.chatUsersMap[JSON.parse(m.data).sender.pk] = JSON.parse(m.data).sender.fields.username

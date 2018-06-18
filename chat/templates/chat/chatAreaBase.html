@@ -1,9 +1,9 @@
-<v-card-text id="chatArea" class="chat-box pa-3" elevation-0>
-  <div v-if="noMessages" class="mb-3">
+<v-card-text id="chatArea" class="chat-box px-0" elevation-0>
+  <div v-if="noMessages" class="mb-3 mx-3">
       No messages yet
   </div>
-  <div v-else>
-    <div  class="mb-4" v-for="message in messages">
+  <div style="height:300px;overflow-y:scroll" v-else>
+    <div class="mb-4 mx-3" v-for="message in messages">
         <div v-if="chatUsersMap[message.fields.sender] !== loggedInUser.fields.username">
             <span class="ml-2 mb-1"> <b> [[ chatUsersMap[message.fields.sender]  ]]: </b> </span> <br>
             <span class="rounded green white--text px-4 py-1"> [[ message.fields.text ]] </span>
@@ -12,7 +12,8 @@
             <v-spacer></v-spacer>
             <span class="rounded grey lighten-3 black--text px-4 py-2"> [[ message.fields.text ]] </span>                           
         </v-layout>
-    </div>    
+    </div>
+    <div id="bottomOfArea"></div>    
   </div> 
 </v-card-text>
 <v-divider></v-divider>    	
