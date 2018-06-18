@@ -50,21 +50,20 @@
     new Vue({
         el: '#app',
         delimiters: ['[[', ']]'],
-        data: {
+        data: () =>  ({
           privateView: false,
+          groupView: false,
           onlineUsers: {{ users }},
           loggedInUser: {{ current_user }}[0],
-          selectedUser: {{ selected_user }}[0],          
+          selectedUser: {{ selected_user }}[0],
+          chatUsersMap: {},          
           message: '',
           chatSocket: null,
-          messages: [],
+          messages: {{ messages }},
           noMessages: true
-        },
+        }),
         methods:{
-          selectUser(user){
-            this.selectedUser=user   
-            this.noMessages = true             
-            this.messages = []
+          selectUser(user){       
             window.location.href = '/message/' + user.pk                  
           },
           getChatToken(){
@@ -81,20 +80,26 @@
                    'receiver': this.selectedUser
                }));
                this.message = ''            
-          }        
+          }       
         },
         created(){
-          if (this.selectedUser.length !== 1) this.privateView = true
-          if (this.privateView) {
-            this.chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + this.getChatToken() + '/')
-            this.chatSocket.onmessage = (m) => {
-              let message = {
-                   name: JSON.parse(m.data).sender.fields.username,
-                   message: JSON.parse(m.data).message
-               }
-              this.recieveMessage(message)
-            }
-          }  
+        	console.log(this.messages)
+			if (this.selectedUser.length !== 1) this.privateView = true
+			if (this.messages.length > 0) this.noMessages = false
+			if (this.privateView) {
+				this.chatUsersMap[this.loggedInUser.pk] = this.loggedInUser.fields.username
+				this.chatUsersMap[this.selectedUser.pk] = this.selectedUser.fields.username				
+				this.chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + this.getChatToken() + '/')
+				this.chatSocket.onmessage = (m) => {
+				  let message = {
+				  		fields: {
+				  			sender: JSON.parse(m.data).sender.pk,
+				  			text: JSON.parse(m.data).message
+				  		}
+				   }
+				   this.recieveMessage(message)
+				}
+			}  
         }
     })
 </script>
