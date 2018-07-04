@@ -7,5 +7,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^messages/', views.messages, name='messages'),            
-    url(r'^message/(?P<selected_user>\w+)/$', views.message, name='messages'),                
+    url(r'^message/(?P<selected_user>\w+)/$', views.message, name='messages'),
+    url(r'^api/messages/', views.messagesApi, name='messagesApi'),
 ]
