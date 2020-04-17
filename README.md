@@ -23,7 +23,8 @@ For starting local dev server
 ```sh
 $ python3 manage.py runserver
 ```
-Navigate to ``` /chat ``` to create a new chat room
+Also make sure to create new users from the console : `python manage.py createsuperuser`  
+Navigate to ``` /chat ``` to create a new chat room.
 
 License
 ----
