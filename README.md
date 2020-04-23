@@ -23,8 +23,16 @@ For starting local dev server
 ```sh
 $ python3 manage.py runserver
 ```
-Also make sure to create new users from the console : `python manage.py createsuperuser`  
-Navigate to ``` /chat ``` to create a new chat room.
+
+Also make sure to create new users from the console : 
+```py
+user@host> python manage.py shell
+>>> from django.contrib.auth.models import User
+>>> user=User.objects.create_user('foo', password='bar')
+>>> user.save()
+```
+
+Finally navigate to ``` /chat ``` to create a new chat room.
 
 License
 ----
